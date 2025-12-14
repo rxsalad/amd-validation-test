@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-preloader
+  namespace: default
+spec:
+
+  replicas: 1 # Only one pod is needed for this task
+  selector:
+    matchLabels:
+      app: model-preloader
+  template:
+    metadata:
+      labels:
+        app: model-preloader
+    spec:
+      hostIPC: true
+
+      #nodeSelector:
+      #  doks.digitalocean.com/gpu-model: mi350x
+      #  doks.digitalocean.com/gpu-model: mi325x
+
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: amd.com/gpu
+        operator: Exists
+        effect: NoSchedule
+ 
+      containers:
+      - name: model-preloader-container
+        image: docker.io/richardxgf/amd:vllm_0.11.1
+        imagePullPolicy: Always
+        
+        command: ["sh", "-c", "sleep infinity"] # We will exec into the pod to run the preloading scripts manually
+
+        env:
+        - name: MODEL                   # Model ID in Hugging Face 
+          value: meta-llama/Llama-3.1-8B-Instruct
+        - name: HF_TOKEN                # Access to private or gated Huggingface Models 
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: HF_TOKEN
+        - name: AWS_ACCESS_KEY_ID       # Access to the DO Spaces
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ENDPOINT_URL
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_REGION
+                       
+        resources:
+          limits:
+            amd.com/gpu: 8
+        volumeMounts:
+        - name: temp-hf-cache
+          mountPath: /root/.cache/huggingface
+        - name: shm
+          mountPath: /dev/shm
+        - name: dev-kfd
+          mountPath: /dev/kfd
+        - name: dev-dri
+          mountPath: /dev/dri
+        securityContext:  # Container level
+          capabilities:
+            add:
+            - SYS_PTRACE
+          seccompProfile:
+            type: Unconfined
+      
+      securityContext:
+        supplementalGroups:  # Pod level
+        - 44
+      
+      volumes:
+      - name: temp-hf-cache
+        hostPath:
+          path: /root/.cache/huggingface
+          type: DirectoryOrCreate
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 128Gi
+      - name: dev-kfd
+        hostPath:
+          path: /dev/kfd
+      - name: dev-dri
+        hostPath:
+          path: /dev/dri

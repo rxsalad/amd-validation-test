@@ -1,0 +1,6 @@
+python-dotenv 
+jupyterlab 
+ipywidgets
+pandas 
+numpy 
+matplotlib

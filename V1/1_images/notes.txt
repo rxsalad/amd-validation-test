@@ -1,0 +1,13 @@
+########## Build & Push - Docker Hub
+
+# Training test (creating models from scatch)
+docker image build -t docker.io/richardxgf/amd:primus_v25.10 -f Dockerfile.primus_v25.10 . 
+docker push docker.io/richardxgf/amd:primus_v25.10
+
+# Load models from DO Spaces to workloads
+docker image build -t docker.io/richardxgf/amd:model_loading_1.0 -f Dockerfile.model_loading_v1.0 .
+docker push docker.io/richardxgf/amd:model_loading_1.0
+
+# Inference test (always running)
+docker image build -t docker.io/richardxgf/amd:vllm_0.11.1 -f Dockerfile.vllm_v0.11.1 . 
+docker push docker.io/richardxgf/amd:vllm_0.11.1

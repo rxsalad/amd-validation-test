@@ -1,0 +1,238 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: megatron-llama
+  namespace: default
+spec:
+
+  replicas: 4
+  selector:
+    matchLabels:
+      app: megatron-llama
+  template:
+    metadata:
+      labels:
+        app: megatron-llama
+    spec:
+      hostIPC: true
+
+      #nodeSelector:
+      #  doks.digitalocean.com/gpu-model: mi350x
+      #  doks.digitalocean.com/gpu-model: mi325x
+
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: amd.com/gpu
+        operator: Exists
+        effect: NoSchedule
+ 
+      initContainers: 
+
+      - name: megatron-training-container # Restart if it returns non-zero
+        image: docker.io/richardxgf/amd:primus_v25.10
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"] # Test only
+        #command: ["sh", "-c", "python3 test_training.py && sleep infinity"] # Run as the main container
+        #command: ["sh", "-c", "python3 test_training.py"] # The default command in the container (for initContainer), it would exit with 0 (but the training job may fail) 
+
+        env:
+        - name: TASK_NAME # Task Name, can be anything 
+          value: "AMD TEST - megatron training, by RS"  
+        - name: BUCKET # The bucket to keep both models and test data
+          value: "rs-validation-test"      
+        - name: FOLDER # The folder for this task, "/megatron" will be appended by the code
+          value: "test20251213"         
+        - name: NODE_NAME # Get the Node Name, useful for mapping to its physical server name    
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: AWS_ACCESS_KEY_ID # Access to the DO Spaces
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ENDPOINT_URL
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_REGION
+
+        resources:
+          limits:
+            amd.com/gpu: 8 # up to 8
+        volumeMounts:
+        - name: temp-hf-cache
+          mountPath: /root/.cache/huggingface
+        - name: shm
+          mountPath: /dev/shm
+        - name: dev-kfd
+          mountPath: /dev/kfd
+        - name: dev-dri
+          mountPath: /dev/dri
+        securityContext:    # Container level
+          capabilities:
+            add:
+            - SYS_PTRACE
+          seccompProfile:
+            type: Unconfined
+
+      - name: model-loader-container # Restart if it returns non-zero
+        image: docker.io/richardxgf/amd:model_loading_1.0
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"] # Test only
+        #command: ["sh", "-c", "python3 test_model_loading.py && sleep infinity"] # Run as the main container
+        #command: ["sh", "-c", "python3 test_model_loading.py"] # The default command in the container (for initContainer), it would exits with 0 or 1 (loading failed)
+
+        env:
+        - name: TASK_NAME # Task Name, can be anything 
+          value: "AMD TEST - model loading, by RS" 
+        - name: BUCKET # The bucket to keep both models and test data
+          value: "rs-validation-test"     
+        - name: FOLDER # The folder for this task, "/benchmark/model_loading" will be appended by the code
+          value: "test20251213"         
+        - name: NODE_NAME # Get the Node Name, useful for mapping to its physical server name 
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MODEL
+          value: meta-llama/Llama-3.1-8B-Instruct
+        - name: MODEL_FOLDER
+          value: models--meta-llama--Llama-3.1-8B-Instruct
+        - name: OVERRIDE # '0' or '1', whether to override the existing model in the pod
+          value: '1'
+        - name: AWS_ACCESS_KEY_ID # Access to the DO Spaces
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ENDPOINT_URL
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_REGION         
+        
+        resources:
+          limits:
+            amd.com/gpu: 8
+        volumeMounts:
+        - name: temp-hf-cache
+          mountPath: /root/.cache/huggingface
+        - name: shm
+          mountPath: /dev/shm
+        - name: dev-kfd
+          mountPath: /dev/kfd
+        - name: dev-dri
+          mountPath: /dev/dri
+        securityContext:  # Container level
+          capabilities:
+            add:
+            - SYS_PTRACE
+          seccompProfile:
+            type: Unconfined
+      
+      containers:
+      - name: vllm-inference-container # Should run continuously 
+        image: docker.io/richardxgf/amd:vllm_0.11.1
+        imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"] # Test only
+        #command: ["sh", "-c", "python3 test_inference.py"] # # The default command in the container (for mainContainer)
+
+        env:
+        - name: TASK_NAME # Task Name, can be anything 
+          value: "AMD TEST - vllm inference using llama, by RS"  
+        - name: BUCKET # The bucket to keep both models and test data
+          value: "rs-validation-test"     
+        - name: FOLDER  # The folder for this task, "/llama" will be appended by the code
+          value: "test20251213"      
+        - name: NODE_NAME # Get the Node Name, useful for mapping to its physical server name 
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        #- name: HF_TOKEN # The access to private or gated Huggingface models, and it is only required when downloading these models
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: rs-environment-variables
+        #      key: HF_TOKEN
+        - name: MODEL
+          value: meta-llama/Llama-3.1-8B-Instruct
+        - name: AWS_ACCESS_KEY_ID # Access to the DO Spaces
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ENDPOINT_URL
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_REGION
+
+        resources:
+          limits:
+            amd.com/gpu: 8
+        volumeMounts:
+        - name: temp-hf-cache
+          mountPath: /root/.cache/huggingface
+        - name: shm
+          mountPath: /dev/shm
+        - name: dev-kfd
+          mountPath: /dev/kfd
+        - name: dev-dri
+          mountPath: /dev/dri
+        securityContext:  # Container level
+          capabilities:
+            add:
+            - SYS_PTRACE
+          seccompProfile:
+            type: Unconfined
+      
+      securityContext:
+        supplementalGroups:  # Pod level
+        - 44
+      
+      volumes:
+      - name: temp-hf-cache
+        hostPath:
+          path: /root/.cache/huggingface
+          type: DirectoryOrCreate
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 128Gi
+      - name: dev-kfd
+        hostPath:
+          path: /dev/kfd
+      - name: dev-dri
+        hostPath:
+          path: /dev/dri

@@ -1,0 +1,117 @@
+#  kubectl apply -f doks-deploy.yaml
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-loader
+  namespace: default
+spec:
+
+  replicas: 4
+  selector:
+    matchLabels:
+      app: model-loader
+  template:
+    metadata:
+      labels:
+        app: model-loader
+    spec:
+      hostIPC: true
+
+      #nodeSelector:
+      #  doks.digitalocean.com/gpu-model: mi350x
+      #  doks.digitalocean.com/gpu-model: mi325x
+
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: amd.com/gpu
+        operator: Exists
+        effect: NoSchedule
+
+      # The main container runs the inference job forever
+      containers:
+      - name: model-loader-container
+        image: docker.io/richardxgf/amd:model_loading_1.0
+        #imagePullPolicy: Always
+        #command: ["sh", "-c", "sleep infinity"] # Test only
+        command: ["sh", "-c", "python3 test_model_loading.py && sleep infinity"] # As the main container
+        #command: ["sh", "-c", "python3 test_model_loading.py"] # The default command in the container, exits with 0 or 1
+
+        env:
+        - name: TASK_NAME
+          value: "AMD TEST - model loading, by RS" # Task Name, can be anything   
+        - name: BUCKET
+          value: "rs-validation-test"   # BUCKET   
+        - name: FOLDER
+          value: "test20251213"         # PREFIX, "/benchmark/model_loading" will be appended by the code
+        - name: NODE_NAME               # Get the Node Name, useful for mapping to its physical server name 
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MODEL
+          value: meta-llama/Llama-3.1-8B-Instruct
+        - name: MODEL_FOLDER
+          value: models--meta-llama--Llama-3.1-8B-Instruct
+        - name: OVERRIDE                #'0' or '1', whether to override the existing model in the pod
+          value: '0'
+
+        - name: AWS_ACCESS_KEY_ID       # Access to the DO Spaces
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_ENDPOINT_URL
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: rs-environment-variables
+              key: AWS_REGION         
+        resources:
+          limits:
+            amd.com/gpu: 8
+        volumeMounts:
+        - name: temp-hf-cache
+          mountPath: /root/.cache/huggingface
+        - name: shm
+          mountPath: /dev/shm
+        - name: dev-kfd
+          mountPath: /dev/kfd
+        - name: dev-dri
+          mountPath: /dev/dri
+        securityContext:  # Container level
+          capabilities:
+            add:
+            - SYS_PTRACE
+          seccompProfile:
+            type: Unconfined
+      
+      securityContext:
+        supplementalGroups:  # Pod level
+        - 44
+      
+      volumes:
+      - name: temp-hf-cache
+        hostPath:
+          path: /root/.cache/huggingface
+          type: DirectoryOrCreate
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 128Gi
+      - name: dev-kfd
+        hostPath:
+          path: /dev/kfd
+      - name: dev-dri
+        hostPath:
+          path: /dev/dri

@@ -1,0 +1,11 @@
+{
+  "task name": "AMD TEST - model loading, by RS",
+  "node name": "rs002-fw-gpu-325-pool-sr6zw",
+  "type": "model_loading",
+  "online utc": "2025-12-14 22:52:41",
+  "state": "success",
+  "duration_s": 21.168,
+  "data size_GB": 16.07,
+  "dl_throughput_Gbps": 6.073,
+  "message": "Successfully downloaded the model to local path /root/.cache/huggingface/hub/models--meta-llama--Llama-3.1-8B-Instruct!"
+}

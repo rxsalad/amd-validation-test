@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rs-environment-variables
+type: Opaque
+stringData:
+  # HF_TOKEN is only required when preloading models from Hugging Face to DO Spaces
+  HF_TOKEN: "***********************"
+  AWS_ENDPOINT_URL: "https://atl1.digitaloceanspaces.com"
+  AWS_ACCESS_KEY_ID: "***********************"
+  AWS_SECRET_ACCESS_KEY: "***********************"
+  AWS_REGION: "atl1"

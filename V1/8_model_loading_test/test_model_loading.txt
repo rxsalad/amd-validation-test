@@ -1,0 +1,55 @@
+######################################## Introduction
+
+The image docker.io/richardxgf/amd:model_loading_1.0 is designed to preload a specific model from DO Spaces onto designated GPU nodes in DOKS:
+
+{BUCKET}/models/{MODEL_FOLDER} -> /root/.cache/huggingface/hub/{MODEL_FOLDER}
+
+It can be used as an init container integrated into any test workload, or run independently using a Kubernetes DaemonSet or Deployment.
+
+After the task completes, benchmark data is generated and uploaded to DO Spaces:
+
+{BUCKET}/{FOLDER}/benchmark/model_loading/{NODE_NAME}.log
+
+The 11 environment variables passed to the pod:
+- TASK_NAME, can be anything.   
+- NODE_NAME, the DOKS worker name. 
+- BUCKET, to keep both models and benchmark data.
+- FOLDER, to keep benchmark data.
+- MODEL, the Model ID in Hugging Face, such as "meta-llama/Llama-3.1-8B-Instruct"
+- MODEL_FOLDER, the model folder name in both DO Spaces and local, such as "models--meta-llama--Llama-3.1-8B-Instruct", which should align with the one generated and used by the vLLM server running the model ID.
+- OVERRIDE, "1" to override the existing model within the pod and "0" to skip
+- AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ENDPOINT_URL, AWS_ENDPOINT_URL (to access DO Spaces)
+
+
+######################################## Test the image
+
+How to test the Image:
+- Override the default command in the Dockerfile by setting the command to "sleep infinity" in the pod manifest.
+- Start the pod and exec into the pod.
+- Manually run the original command - "python3 test_model_loading.py".
+- Run the model using a vLLM server and test the inference.
+
+We need GPU nodes for this test.
+
+! Create a secret for Hugging Face and DO Spaces access.
+# kubectl apply -f V1/2_environment_test/21_doks_access.yaml
+
+# kubectl apply -f V1/8_model_loading_test/doks_model_loading.yaml
+# kubectl get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+model-loader-dcb7849fc-rfpjg   1/1     Running   0          42s
+
+# kubectl exec -it model-loader-dcb7849fc-rfpjg -- /bin/bash
+
+! Download the model from DO Spaces 
+root@model-loader-dcb7849fc-rfpjg:/app# python3 test_model_loading.py
+
+! Run the model
+root@model-loader-dcb7849fc-rfpjg:/app# python3 vllm serve meta-llama/Llama-3.1-8B-Instruct
+
+! Test the inference 
+root@model-loader-dcb7849fc-rfpjg:/app# curl http://localhost:8000/v1/chat/completions   -H "Content-Type: application/json"   -d '{
+    "model": "meta-llama/Llama-3.1-8B-Instruct",
+    "messages": [{"role": "user", "content": "who are you?"}]
+  }'
+

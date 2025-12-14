@@ -1,0 +1,220 @@
+
+Preloading models from Hugging Face to DO Spaces is a one-time task that can be performed manually.
+This process requires a GPU node (either the Test Worker or a pod running on DOKS), ample local disk space (≥1 TB), and high network bandwidth to both Hugging Face and DO Spaces.
+
+######################################## Using a pod
+
+Launch a pod using the image (docker.io/richardxgf/amd:vllm_0.11.1) that has both vLLM and rclone pre-installed.
+
+The 6 environment variables are required by the pod:
+- MODEL, HF_TOKEN (to access private or gated models in Huggingface) 
+- AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ENDPOINT_URL, AWS_ENDPOINT_URL (to access DO Spaces)
+
+Perform the follow steps within the pod:
+1 - Download a model from Hugging Face to the pod’s local disk (/root/.cache/huggingface/hub/), which can also be a volume mounted from the host.
+2 - Run and test the model.
+3 - Upload the model to the DO Spaces. The downloaded model data contains symlinks, which should be resolved during upload.
+ 
+ 
+######################################## meta-llama/Llama-3.1-8B-Instruct (15GB)
+
+#################### Step 1: Run the pod (1 replica)
+
+! Create a secret for Hugging Face and DO Spaces access.
+# kubectl apply -f V1/2_environment_test/21_doks_access.yaml
+
+# kubectl apply -f V1/9_model_preloading_from_huggingface/doks_model_preloading.yaml 
+# kubectl get pod
+NAME                               READY   STATUS    RESTARTS   AGE
+model-preloader-86489cd666-crnkf   1/1     Running   0          78s
+
+
+#################### Step 2: Exec into the pod and generate the rclone configuration file
+
+# kubectl exec -it model-preloader-86489cd666-crnkf -- /bin/bash
+root@model-preloader-86489cd666-crnkf:/app# 
+
+! Generate the rclone configuration file
+root@model-preloader-86489cd666-crnkf:/app# python helper.py 
+
+! Check the configuration file
+root@model-preloader-86489cd666-crnkf:/app# cat ~/.config/rclone/rclone.conf
+
+
+#################### Step 3: Download and run the model, and test the inference
+
+! Download and run the model
+root@model-preloader-86489cd666-crnkf:/app# vllm serve meta-llama/Llama-3.1-8B-Instruct
+root@model-preloader-86489cd666-crnkf:/app# vllm serve $MODEL
+
+! Check the downloaded model data
+root@model-preloader-86489cd666-crnkf:~/.cache/huggingface/hub# du -sh models--meta-llama--Llama-3.1-8B-Instruct
+15G     models--meta-llama--Llama-3.1-8B-Instruct
+root@model-preloader-86489cd666-crnkf:~/.cache/huggingface/hub/models--meta-llama--Llama-3.1-8B-Instruct# tree
+.
+|-- blobs
+|   |-- 02ee80b6196926a5ad790a004d9efd6ab1ba6542
+|   |-- 09d433f650646834a83c580877bd60c6d1f88f7755305c12576b5c7058f9af15
+|   |-- 0bb6fd75b3ad2fe988565929f329945262c2814e
+|   |-- 0fd8120f1c6acddc268ebc2583058efaf699a771
+|   |-- 2b1879f356aed350030bb40eb45ad362c89d9891096f79a3ab323d3ba5607668
+|   |-- 5cc5f00a5b203e90a27a3bd60d1ec393b07971e8
+|   |-- 92ecfe1a2414458b4821ac8c13cf8cb70aed66b5eea8dc5ad9eeb4ff309d6d7b
+|   |-- cc7276afd599de091142c6ed3005faf8a74aa257
+|   |-- db88166e2bc4c799fd5d1ae643b75e84d03ee70e
+|   `-- fc1cdddd6bfa91128d6e94ee73d0ce62bfcdb7af29e978ddcab30c66ae9ea7fa
+|-- refs
+|   `-- main
+`-- snapshots
+    `-- 0e9e39f249a16976918f6564b8830bc894c89659
+        |-- config.json -> ../../blobs/0bb6fd75b3ad2fe988565929f329945262c2814e
+        |-- generation_config.json -> ../../blobs/cc7276afd599de091142c6ed3005faf8a74aa257
+        |-- model-00001-of-00004.safetensors -> ../../blobs/2b1879f356aed350030bb40eb45ad362c89d9891096f79a3ab323d3ba5607668
+        |-- model-00002-of-00004.safetensors -> ../../blobs/09d433f650646834a83c580877bd60c6d1f88f7755305c12576b5c7058f9af15
+        |-- model-00003-of-00004.safetensors -> ../../blobs/fc1cdddd6bfa91128d6e94ee73d0ce62bfcdb7af29e978ddcab30c66ae9ea7fa
+        |-- model-00004-of-00004.safetensors -> ../../blobs/92ecfe1a2414458b4821ac8c13cf8cb70aed66b5eea8dc5ad9eeb4ff309d6d7b
+        |-- model.safetensors.index.json -> ../../blobs/0fd8120f1c6acddc268ebc2583058efaf699a771
+        |-- special_tokens_map.json -> ../../blobs/02ee80b6196926a5ad790a004d9efd6ab1ba6542
+        |-- tokenizer.json -> ../../blobs/5cc5f00a5b203e90a27a3bd60d1ec393b07971e8
+        `-- tokenizer_config.json -> ../../blobs/db88166e2bc4c799fd5d1ae643b75e84d03ee70e
+
+4 directories, 21 files
+
+! Test the inference 
+root@model-preloader-86489cd666-crnkf:/app# curl http://localhost:8000/v1/chat/completions   -H "Content-Type: application/json"   -d '{
+    "model": "meta-llama/Llama-3.1-8B-Instruct",
+    "messages": [{"role": "user", "content": "who are you?"}]
+  }'
+
+
+#################### Step 4: Upload the model from local to DO Spaces
+
+--copy-links, to remove the symlinks and copy the actual target files.
+--exclude "blobs/**", to avoid duplicating files.
+
+root@model-preloader-86489cd666-crnkf:/app# rclone copy \
+  /root/.cache/huggingface/hub/models--meta-llama--Llama-3.1-8B-Instruct \
+  ds:rs-validation-test/models/models--meta-llama--Llama-3.1-8B-Instruct \
+  --exclude "blobs/**" \
+  --copy-links \
+  -P
+
+
+#################### Step 5: Download the model from DO Spaces to local
+
+! Delete the existing model 
+root@model-preloader-86489cd666-crnkf:/app# rm -r /root/.cache/huggingface/hub/models--meta-llama--Llama-3.1-8B-Instruct
+
+! Download the model from DO Spaces to local
+root@model-preloader-86489cd666-crnkf:/app# rclone copy \
+  ds:rs-validation-test/models/models--meta-llama--Llama-3.1-8B-Instruct \
+  ~/.cache/huggingface/hub/models--meta-llama--Llama-3.1-8B-Instruct \
+  -P
+
+! The symlinks have been replaced with the actual files, and the blobs folder has been removed.
+root@model-preloader-86489cd666-crnkf:~/.cache/huggingface/hub/models--meta-llama--Llama-3.1-8B-Instruct# tree   
+.
+|-- refs
+|   `-- main
+`-- snapshots
+    `-- 0e9e39f249a16976918f6564b8830bc894c89659
+        |-- config.json
+        |-- generation_config.json
+        |-- model-00001-of-00004.safetensors
+        |-- model-00002-of-00004.safetensors
+        |-- model-00003-of-00004.safetensors
+        |-- model-00004-of-00004.safetensors
+        |-- model.safetensors.index.json
+        |-- special_tokens_map.json
+        |-- tokenizer.json
+        `-- tokenizer_config.json
+
+3 directories, 11 files
+
+
+#################### Step 6: Run the vLLM server again and test the inference
+
+! Run the downloaded model from DO Spaces
+root@model-preloader-86489cd666-crnkf:/app# vllm serve meta-llama/Llama-3.1-8B-Instruct
+root@model-preloader-86489cd666-crnkf:/app# vllm serve $MODEL
+
+! Test the inference 
+root@model-preloader-86489cd666-crnkf:/app# curl http://localhost:8000/v1/chat/completions   -H "Content-Type: application/json"   -d '{
+    "model": "meta-llama/Llama-3.1-8B-Instruct",
+    "messages": [{"role": "user", "content": "who are you?"}]
+  }'
+
+
+######################################## deepseek-ai/DeepSeek-V3-0324 (642GB)
+
+! Download and run the model
+root@model-preloader-86489cd666-crnkf:/app# vllm serve deepseek-ai/DeepSeek-V3-0324 \
+         --tensor-parallel-size 8 --block-size 1 --enable-prefix-caching \
+         --enable-prompt-tokens-details --safetensors-load-strategy eager
+
+! Test the inference
+root@model-preloader-86489cd666-crnkf:/app# curl http://localhost:8000/v1/chat/completions   -H "Content-Type: application/json"   -d '{
+    "model": "deepseek-ai/DeepSeek-V3-0324",
+    "messages": [{"role": "user", "content": "who are you?"}]
+  }'
+
+! Check the downloaded model data
+root@model-preloader-86489cd666-crnkf:~/.cache/huggingface/hub# du -sh models--deepseek-ai--DeepSeek-V3-0324
+642G    models--deepseek-ai--DeepSeek-V3-0324
+
+! Upload the model from local to DO Spaces
+root@model-preloader-86489cd666-crnkf:/app# rclone copy \
+  /root/.cache/huggingface/hub/models--deepseek-ai--DeepSeek-V3-0324 \
+  ds:rs-validation-test/models/models--deepseek-ai--DeepSeek-V3-0324 \
+  --exclude "blobs/**" \
+  --copy-links \
+  -P
+
+Transferred:      641.312 GiB / 641.312 GiB, 100%, 381.637 MiB/s, ETA 0s
+Checks:                 0 / 0, -, Listed 180
+Transferred:          174 / 174, 100%
+Elapsed time:     18m59.3s
+
+
+######################################## Qwen/Qwen3-235B-A22B-Instruct-2507-FP8 (642GB)
+
+! Download and run the model
+root@model-preloader-86489cd666-crnkf:/app# VLLM_USE_V1=1 \
+          SAFETENSORS_FAST_GPU=1 \
+          VLLM_ROCM_USE_AITER=1 \
+          VLLM_ROCM_USE_AITER_MOE=1 \
+          VLLM_USE_TRITON_FLASH_ATTN=0 \
+          vllm serve Qwen/Qwen3-235B-A22B-Instruct-2507-FP8 \
+            --tensor-parallel-size 4 \
+            --enable-expert-parallel \
+            --kv-cache-dtype fp8 \
+            --distributed-executor-backend mp \
+            --compilation-config '{"full_cuda_graph":false}' \
+            --trust-remote-code \
+            --max-model-len 32768 \
+            --quantization fp8 \
+            --max_num_batched_tokens 32768 \
+            --enable-prefix-caching --enable-prompt-tokens-details --safetensors-load-strategy eager
+
+! Test the inference
+root@model-preloader-86489cd666-crnkf:/app# curl http://localhost:8000/v1/chat/completions   -H "Content-Type: application/json"   -d '{
+    "model": "Qwen/Qwen3-235B-A22B-Instruct-2507-FP8",
+    "messages": [{"role": "user", "content": "who are you?"}]
+  }'
+
+! Check the downloaded model data
+root@model-preloader-86489cd666-crnkf:~/.cache/huggingface/hub# du -sh models--Qwen--Qwen3-235B-A22B-Instruct-2507-FP8
+221G    models--Qwen--Qwen3-235B-A22B-Instruct-2507-FP8
+
+! Upload the model from local to DO Spaces
+root@model-preloader-86489cd666-crnkf:/app# rclone copy \
+  /root/.cache/huggingface/hub/models--Qwen--Qwen3-235B-A22B-Instruct-2507-FP8 \
+  ds:rs-validation-test/models/models--Qwen--Qwen3-235B-A22B-Instruct-2507-FP8 \
+  --exclude "blobs/**" \
+  --copy-links \
+  -P
+
+Transferred:      220.210 GiB / 220.210 GiB, 100%, 693.626 MiB/s, ETA 0s
+Checks:                 0 / 0, -, Listed 44
+Transferred:           38 / 38, 100%
+Elapsed time:       6m9.7s

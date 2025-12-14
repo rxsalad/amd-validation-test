@@ -1,0 +1,70 @@
+Install and setup the necessary tools on the Test Worker:
+
+########## Install: basic tools
+apt update
+apt install tree
+apt install net-tools
+
+
+########## Install: docker
+https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html
+
+
+########## Install: doctl
+https://docs.digitalocean.com/reference/doctl/how-to/install/
+sudo snap install doctl
+mkdir -p /root/.config
+doctl auth init
+
+
+########## Install: kubectl 
+https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+curl -LO https://dl.k8s.io/release/v1.34.0/bin/linux/amd64/kubectl
+chmod +x kubectl
+mv kubectl /usr/local/bin/
+
+mkdir -p /root/.kube
+snap connect doctl:kube-config # Allow doctl to access /root/.kube/config, the kube-config is the interface name
+
+
+########## Install: rclone
+! Install rclone and prepare config directory
+! https://rclone.org/downloads/
+curl -Lk 'https://downloads.rclone.org/v1.71.2/rclone-v1.71.2-linux-amd64.deb' -o rclone-v1.71.2-linux-amd64.deb && \
+    dpkg -i rclone-v1.71.2-linux-amd64.deb && \
+    rm rclone-v1.71.2-linux-amd64.deb && \
+    mkdir -p /root/.config/rclone
+
+! Generete the rclone configure file
+python3 V1/1_images/helper.py
+
+! Base Usage
+rclone lsf ds:rs-validation-test
+rclone lsf ds:rs-validation-test/models
+rclone ls ds:rs-validation-test/models/models--meta-llama--Llama-3.1-8B-Instruct
+
+
+########## Python
+
+pip install python-dotenv  --break-system-packages
+pip install jupyterlab ipywidgets --break-system-packages
+pip install pandas numpy matplotlib --break-system-packages
+
+pip install --upgrade \
+  jupyterlab ipywidgets jsonschema \
+  --ignore-installed \
+  --break-system-packages
+
+jupyter lab --no-browser --port=8888  --ip=* --allow-root  --NotebookApp.token=''  
+
+jupyter lab \
+  --no-browser \
+  --port=8888 \
+  --ip=* \
+  --allow-root \
+  --ServerApp.allow_origin='*' \
+  --ServerApp.allow_remote_access=True \
+  --NotebookApp.password=''
+
+

@@ -1,0 +1,4 @@
+| 536331814 | rs002-fw-gpu-350-pool-spk44 | atl1node342 |
+| 536331815 | rs002-fw-gpu-350-pool-spk4h | atl1node344 |
+| 533381766 | rs002-fw-gpu-325-pool-sr6zw | atl1node212 |
+| 533381769 | rs002-fw-gpu-325-pool-sr6zr | atl1node273 |

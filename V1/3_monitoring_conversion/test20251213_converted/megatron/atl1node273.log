@@ -1,0 +1,900 @@
+{
+  "node name": "rs002-fw-gpu-325-pool-sr6zr",
+  "task name": "AMD TEST - megatron training, by RS",
+  "type": "training",
+  "online utc": "2025-12-14 22:35:23",
+  "command": "MOCK_DATA=1 TEE_OUTPUT=1 MBS=5 BS=120 TP=8 TE_FP8=0 NO_TORCH_COMPILE=1 SEQ_LENGTH=4096 TOTAL_ITERS=12 bash /workspace/Megatron-LM/examples/llama/train_llama2.sh",
+  "state": "success",
+  "duration_s": 1033.113,
+  "message": ""
+}
+
+----------------------------------------> amd-smi version
+AMDSMI Tool: 26.1.0+5df6c765 | AMDSMI Library version: 26.1.0 | ROCm version: 7.1.0 | amdgpu version: 6.14.14 | amd_hsmp version: N/A
+
+
+----------------------------------------> rocm-smi
+
+
+============================================= ROCm System Management Interface =============================================
+======================================================= Concise Info =======================================================
+Device  Node  IDs              Temp        Power     Partitions          SCLK    MCLK     Fan  Perf  PwrCap   VRAM%  GPU%  
+[3m              (DID,     GUID)  (Junction)  (Socket)  (Mem, Compute, ID)                                                    [0m
+============================================================================================================================
+0       2     0x74b9,   43855  51.0°C      221.0W    NPS1, SPX, 0        608Mhz  1500Mhz  0%   auto  1000.0W  80%    2%    
+1       3     0x74b9,   27976  56.0°C      224.0W    NPS1, SPX, 0        640Mhz  1500Mhz  0%   auto  1000.0W  80%    2%    
+2       4     0x74b9,   26434  50.0°C      224.0W    NPS1, SPX, 0        627Mhz  1500Mhz  0%   auto  1000.0W  82%    2%    
+3       5     0x74b9,   41285  56.0°C      226.0W    NPS1, SPX, 0        613Mhz  1500Mhz  0%   auto  1000.0W  53%    2%    
+4       6     0x74b9,   29526  50.0°C      216.0W    NPS1, SPX, 0        616Mhz  1500Mhz  0%   auto  1000.0W  71%    2%    
+5       7     0x74b9,   46417  57.0°C      252.0W    NPS1, SPX, 0        621Mhz  1500Mhz  0%   auto  1000.0W  71%    2%    
+6       8     0x74b9,   48987  50.0°C      228.0W    NPS1, SPX, 0        619Mhz  1500Mhz  0%   auto  1000.0W  71%    2%    
+7       9     0x74b9,   31068  53.0°C      228.0W    NPS1, SPX, 0        612Mhz  1500Mhz  0%   auto  1000.0W  71%    2%    
+============================================================================================================================
+=================================================== End of ROCm SMI Log ====================================================
+
+
+----------------------------------------> rocm-smi --showproduct
+
+
+============================ ROCm System Management Interface ============================
+====================================== Product Info ======================================
+GPU[0]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[0]		: Card Model: 		0x74b9
+GPU[0]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[0]		: Card SKU: 		M3250101
+GPU[0]		: Subsystem ID: 	0x74a5
+GPU[0]		: Device Rev: 		0x00
+GPU[0]		: Node ID: 		2
+GPU[0]		: GUID: 		43855
+GPU[0]		: GFX Version: 		gfx942
+GPU[1]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[1]		: Card Model: 		0x74b9
+GPU[1]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[1]		: Card SKU: 		M3250101
+GPU[1]		: Subsystem ID: 	0x74a5
+GPU[1]		: Device Rev: 		0x00
+GPU[1]		: Node ID: 		3
+GPU[1]		: GUID: 		27976
+GPU[1]		: GFX Version: 		gfx942
+GPU[2]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[2]		: Card Model: 		0x74b9
+GPU[2]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[2]		: Card SKU: 		M3250101
+GPU[2]		: Subsystem ID: 	0x74a5
+GPU[2]		: Device Rev: 		0x00
+GPU[2]		: Node ID: 		4
+GPU[2]		: GUID: 		26434
+GPU[2]		: GFX Version: 		gfx942
+GPU[3]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[3]		: Card Model: 		0x74b9
+GPU[3]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[3]		: Card SKU: 		M3250101
+GPU[3]		: Subsystem ID: 	0x74a5
+GPU[3]		: Device Rev: 		0x00
+GPU[3]		: Node ID: 		5
+GPU[3]		: GUID: 		41285
+GPU[3]		: GFX Version: 		gfx942
+GPU[4]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[4]		: Card Model: 		0x74b9
+GPU[4]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[4]		: Card SKU: 		M3250101
+GPU[4]		: Subsystem ID: 	0x74a5
+GPU[4]		: Device Rev: 		0x00
+GPU[4]		: Node ID: 		6
+GPU[4]		: GUID: 		29526
+GPU[4]		: GFX Version: 		gfx942
+GPU[5]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[5]		: Card Model: 		0x74b9
+GPU[5]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[5]		: Card SKU: 		M3250101
+GPU[5]		: Subsystem ID: 	0x74a5
+GPU[5]		: Device Rev: 		0x00
+GPU[5]		: Node ID: 		7
+GPU[5]		: GUID: 		46417
+GPU[5]		: GFX Version: 		gfx942
+GPU[6]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[6]		: Card Model: 		0x74b9
+GPU[6]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[6]		: Card SKU: 		M3250101
+GPU[6]		: Subsystem ID: 	0x74a5
+GPU[6]		: Device Rev: 		0x00
+GPU[6]		: Node ID: 		8
+GPU[6]		: GUID: 		48987
+GPU[6]		: GFX Version: 		gfx942
+GPU[7]		: Card Series: 		AMD Instinct Mi325X VF
+GPU[7]		: Card Model: 		0x74b9
+GPU[7]		: Card Vendor: 		Advanced Micro Devices, Inc. [AMD/ATI]
+GPU[7]		: Card SKU: 		M3250101
+GPU[7]		: Subsystem ID: 	0x74a5
+GPU[7]		: Device Rev: 		0x00
+GPU[7]		: Node ID: 		9
+GPU[7]		: GUID: 		31068
+GPU[7]		: GFX Version: 		gfx942
+==========================================================================================
+================================== End of ROCm SMI Log ===================================
+
+
+----------------------------------------> Training Logs
+NO_TRAINING=0
+Single node setup, skipping NCCL and GLOO socket interface settings.
+experiment/1nodes_rank0_train_70B_mbs5_bs120_tp8_pp1_cp1_iter12/TE_FP8_0/2025-12-14_22-35-23/output_perf.log
+70
+Using Mock data
+W1214 22:35:27.865000 104 torch/distributed/run.py:853] 
+W1214 22:35:27.865000 104 torch/distributed/run.py:853] *****************************************
+W1214 22:35:27.865000 104 torch/distributed/run.py:853] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1214 22:35:27.865000 104 torch/distributed/run.py:853] *****************************************
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+/workspace/Megatron-LM/megatron/core/rerun_state_machine.py:253: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert (
+/workspace/Megatron-LM/megatron/core/rerun_state_machine.py:264: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert (
+/workspace/Megatron-LM/megatron/core/rerun_state_machine.py:668: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert (
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+Supported flash-attn versions are >= 2.1.1, <= 2.8.0.post2. Found flash-attn 2.8.3.
+[aiter] start build [module_aiter_enum] under /workspace/aiter/aiter/jit/build/module_aiter_enum
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_aiter_enum
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_aiter_enum
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_aiter_enum
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_aiter_enum
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_aiter_enum
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_aiter_enum
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_aiter_enum
+[aiter] [32mfinish build [module_aiter_enum], cost 7.6s [0m
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+[aiter] import [module_aiter_enum] under /workspace/aiter/aiter/jit/module_aiter_enum.so
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/apex/transformer/functional/fused_rope.py:49: UserWarning: Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0
+  warnings.warn("Aiter backend is selected for fused RoPE. This has lower precision. To disable aiter, export USE_ROCM_AITER_ROPE_BACKEND=0", UserWarning)
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+/opt/venv/lib/python3.10/site-packages/torch/library.py:356: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: flash_attn::_flash_attn_backward(Tensor dout, Tensor q, Tensor k, Tensor v, Tensor out, Tensor softmax_lse, Tensor(a6!)? dq, Tensor(a7!)? dk, Tensor(a8!)? dv, float dropout_p, float softmax_scale, bool causal, SymInt window_size_left, SymInt window_size_right, float softcap, Tensor? alibi_slopes, bool deterministic, Tensor? rng_state=None) -> Tensor
+    registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922
+  dispatch key: ADInplaceOrView
+  previous kernel: no debug info
+       new kernel: registered at /opt/venv/lib/python3.10/site-packages/torch/_library/custom_ops.py:922 (Triggered internally at /pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+using world size: 8, data-parallel size: 1, context-parallel size: 1, hierarchical context-parallel sizes: Nonetensor-model-parallel size: 8, encoder-tensor-model-parallel size: 0, pipeline-model-parallel size: 1, encoder-pipeline-model-parallel size: 0, pipeline-model-parallel size: 1 
+WARNING: overriding default arguments for tokenizer_type:GPT2BPETokenizer                        with tokenizer_type:HuggingFaceTokenizer
+accumulate and all-reduce gradients in fp32 for bfloat16 data type.
+using torch.bfloat16 for parameters ...
+------------------------ arguments ------------------------
+  accumulate_allreduce_grads_in_fp32 .............. True
+  adam_beta1 ...................................... 0.9
+  adam_beta2 ...................................... 0.95
+  adam_eps ........................................ 1e-08
+  add_bias_linear ................................. False
+  add_position_embedding .......................... False
+  add_qkv_bias .................................... False
+  adlr_autoresume ................................. False
+  adlr_autoresume_interval ........................ 1000
+  align_grad_reduce ............................... True
+  align_param_gather .............................. False
+  app_tag_run_name ................................ None
+  app_tag_run_version ............................. 0.0.0
+  apply_layernorm_1p .............................. False
+  apply_query_key_layer_scaling ................... False
+  apply_residual_connection_post_layernorm ........ False
+  apply_rope_fusion ............................... True
+  async_save ...................................... None
+  async_tensor_model_parallel_allreduce ........... False
+  attention_backend ............................... AttnBackend.auto
+  attention_dropout ............................... 0.0
+  attention_sink_k ................................ 0
+  attention_softmax_in_fp32 ....................... False
+  auto_detect_ckpt_format ......................... False
+  barrier_with_L1_time ............................ True
+  bert_binary_head ................................ True
+  bert_embedder_type .............................. megatron
+  bert_load ....................................... None
+  bf16 ............................................ True
+  bias_dropout_fusion ............................. True
+  bias_gelu_fusion ................................ False
+  bias_swiglu_fusion .............................. True
+  biencoder_projection_dim ........................ 0
+  biencoder_shared_query_context_model ............ False
+  block_data_path ................................. None
+  calculate_per_token_loss ........................ False
+  check_for_nan_in_loss_and_grad .................. True
+  check_for_spiky_loss ............................ False
+  check_weight_hash_across_dp_replicas_interval ... None
+  ckpt_assume_constant_structure .................. False
+  ckpt_convert_format ............................. None
+  ckpt_convert_save ............................... None
+  ckpt_convert_update_legacy_dist_opt_format ...... False
+  ckpt_format ..................................... torch_dist
+  ckpt_fully_parallel_load ........................ False
+  ckpt_fully_parallel_save ........................ True
+  ckpt_fully_parallel_save_deprecated ............. False
+  ckpt_step ....................................... None
+  classes_fraction ................................ 1.0
+  clip_grad ....................................... 1.0
+  clone_scatter_output_in_embedding ............... True
+  config_logger_dir ............................... 
+  consumed_train_samples .......................... 0
+  consumed_valid_samples .......................... 0
+  context_parallel_size ........................... 1
+  cp_comm_type .................................... ['p2p']
+  create_attention_mask_in_dataloader ............. True
+  cross_entropy_loss_fusion ....................... False
+  data_args_path .................................. None
+  data_cache_path ................................. None
+  data_parallel_random_init ....................... False
+  data_parallel_size .............................. 1
+  data_path ....................................... None
+  data_per_class_fraction ......................... 1.0
+  data_sharding ................................... True
+  dataloader_type ................................. cyclic
+  ddp_average_in_collective ....................... False
+  ddp_bucket_size ................................. None
+  decoder_first_pipeline_num_layers ............... None
+  decoder_last_pipeline_num_layers ................ None
+  decoder_num_layers .............................. None
+  decoder_seq_length .............................. None
+  decoupled_lr .................................... None
+  decoupled_min_lr ................................ None
+  decrease_batch_size_if_needed ................... False
+  defer_embedding_wgrad_compute ................... False
+  deprecated_use_mcore_models ..................... True
+  deterministic_mode .............................. False
+  dino_bottleneck_size ............................ 256
+  dino_freeze_last_layer .......................... 1
+  dino_head_hidden_size ........................... 2048
+  dino_local_crops_number ......................... 10
+  dino_local_img_size ............................. 96
+  dino_norm_last_layer ............................ False
+  dino_teacher_temp ............................... 0.07
+  dino_warmup_teacher_temp ........................ 0.04
+  dino_warmup_teacher_temp_epochs ................. 30
+  disable_straggler_on_startup .................... False
+  disable_te_fused_rope ........................... False
+  dist_ckpt_format_deprecated ..................... None
+  dist_ckpt_strictness ............................ assume_ok_unexpected
+  distribute_saved_activations .................... False
+  distributed_backend ............................. nccl
+  distributed_timeout_minutes ..................... 120
+  embedding_path .................................. None
+  empty_unused_memory_level ....................... 0
+  enable_ft_package ............................... False
+  enable_one_logger ............................... True
+  encoder_num_layers .............................. 80
+  encoder_pipeline_model_parallel_size ............ 0
+  encoder_seq_length .............................. 4096
+  encoder_tensor_model_parallel_size .............. 0
+  end_weight_decay ................................ 0.1
+  eod_mask_loss ................................... False
+  error_injection_rate ............................ 0
+  error_injection_type ............................ transient_error
+  eval_interval ................................... 320000
+  eval_iters ...................................... -1
+  evidence_data_path .............................. None
+  exit_duration_in_mins ........................... None
+  exit_interval ................................... None
+  exit_on_missing_checkpoint ...................... False
+  exit_signal_handler ............................. False
+  expert_model_parallel_size ...................... 1
+  expert_tensor_parallel_size ..................... 8
+  ffn_hidden_size ................................. 28672
+  finetune ........................................ False
+  flash_decode .................................... False
+  fp16 ............................................ False
+  fp16_lm_cross_entropy ........................... False
+  fp32_residual_connection ........................ False
+  fp8 ............................................. None
+  fp8_amax_compute_algo ........................... most_recent
+  fp8_amax_history_len ............................ 1
+  fp8_interval .................................... 1
+  fp8_margin ...................................... 0
+  fp8_param_gather ................................ False
+  fp8_reduce_amax ................................. True
+  fp8_weight_cache ................................ True
+  fp8_weight_transpose_cache ...................... True
+  fp8_wgrad ....................................... True
+  fused_padded_mla_attention ...................... False
+  global_batch_size ............................... 120
+  gradient_accumulation_fusion .................... False
+  group_query_attention ........................... True
+  head_lr_mult .................................... 1.0
+  hidden_dropout .................................. 0.0
+  hidden_size ..................................... 8192
+  hierarchical_context_parallel_sizes ............. None
+  hybrid_attention_ratio .......................... 0.0
+  hybrid_mlp_ratio ................................ 0.0
+  hybrid_override_pattern ......................... None
+  hysteresis ...................................... 2
+  ict_head_size ................................... None
+  ict_load ........................................ None
+  img_h ........................................... 224
+  img_w ........................................... 224
+  indexer_batch_size .............................. 128
+  indexer_log_interval ............................ 1000
+  inference_batch_times_seqlen_threshold .......... -1
+  inference_max_seq_length ........................ 2560
+  init_method_std ................................. 0.02
+  init_method_xavier_uniform ...................... False
+  initial_loss_scale .............................. 4294967296
+  iter_per_epoch .................................. 1250
+  kv_channels ..................................... 128
+  kv_lora_rank .................................... 32
+  lazy_mpu_init ................................... None
+  linear_cross_entropy_loss_fusion ................ False
+  load ............................................ None
+  local_rank ...................................... 0
+  log_batch_size_to_tensorboard ................... False
+  log_interval .................................... 1
+  log_loss_scale_to_tensorboard ................... True
+  log_memory_to_tensorboard ....................... False
+  log_num_zeros_in_grad ........................... False
+  log_params_norm ................................. False
+  log_progress .................................... False
+  log_straggler ................................... False
+  log_throughput .................................. True
+  log_timers_to_tensorboard ....................... False
+  log_validation_ppl_to_tensorboard ............... False
+  log_world_size_to_tensorboard ................... False
+  logging_level ................................... None
+  loss_scale ...................................... None
+  loss_scale_window ............................... 1000
+  lr .............................................. 0.0001
+  lr_decay_iters .................................. 320000
+  lr_decay_samples ................................ None
+  lr_decay_style .................................. cosine
+  lr_warmup_fraction .............................. None
+  lr_warmup_init .................................. 0.0
+  lr_warmup_iters ................................. 0
+  lr_warmup_samples ............................... 0
+  lr_wsd_decay_iters .............................. None
+  lr_wsd_decay_samples ............................ None
+  lr_wsd_decay_style .............................. exponential
+  make_vocab_size_divisible_by .................... 128
+  manual_gc ....................................... False
+  manual_gc_eval .................................. True
+  manual_gc_interval .............................. 0
+  mask_factor ..................................... 1.0
+  mask_prob ....................................... 0.15
+  mask_type ....................................... random
+  masked_softmax_fusion ........................... False
+  max_position_embeddings ......................... 32000
+  max_tokens_to_oom ............................... 12000
+  memory_snapshot_path ............................ snapshot.pickle
+  merge_file ...................................... None
+  micro_batch_size ................................ 5
+  microbatch_group_size_per_vp_stage .............. None
+  min_loss_scale .................................. 1.0
+  min_lr .......................................... 1e-05
+  mmap_bin_files .................................. True
+  mock_data ....................................... True
+  moe_aux_loss_coeff .............................. 0.0
+  moe_expert_capacity_factor ...................... None
+  moe_extended_tp ................................. False
+  moe_ffn_hidden_size ............................. 28672
+  moe_grouped_gemm ................................ False
+  moe_input_jitter_eps ............................ None
+  moe_layer_freq .................................. 1
+  moe_layer_recompute ............................. False
+  moe_pad_expert_input_to_capacity ................ False
+  moe_per_layer_logging ........................... False
+  moe_permute_fusion .............................. False
+  moe_router_bias_update_rate ..................... 0.001
+  moe_router_enable_expert_bias ................... False
+  moe_router_force_load_balancing ................. False
+  moe_router_group_topk ........................... None
+  moe_router_load_balancing_type .................. aux_loss
+  moe_router_num_groups ........................... None
+  moe_router_pre_softmax .......................... False
+  moe_router_score_function ....................... softmax
+  moe_router_topk ................................. 2
+  moe_router_topk_scaling_factor .................. None
+  moe_shared_expert_intermediate_size ............. None
+  moe_shared_expert_overlap ....................... False
+  moe_token_dispatcher_type ....................... allgather
+  moe_token_drop_policy ........................... probs
+  moe_use_legacy_grouped_gemm ..................... False
+  moe_use_upcycling ............................... False
+  moe_z_loss_coeff ................................ None
+  multi_latent_attention .......................... False
+  nccl_communicator_config_path ................... None
+  no_load_optim ................................... None
+  no_load_rng ..................................... None
+  no_persist_layer_norm ........................... False
+  no_save_optim ................................... True
+  no_save_rng ..................................... True
+  non_persistent_ckpt_type ........................ None
+  non_persistent_global_ckpt_dir .................. None
+  non_persistent_local_ckpt_algo .................. fully_parallel
+  non_persistent_local_ckpt_dir ................... None
+  non_persistent_save_interval .................... None
+  norm_epsilon .................................... 1e-05
+  normalization ................................... RMSNorm
+  num_attention_heads ............................. 64
+  num_channels .................................... 3
+  num_classes ..................................... 1000
+  num_dataset_builder_threads ..................... 1
+  num_distributed_optimizer_instances ............. 1
+  num_experts ..................................... None
+  num_layers ...................................... 80
+  num_layers_per_virtual_pipeline_stage ........... None
+  num_query_groups ................................ 8
+  num_workers ..................................... 8
+  one_logger_async ................................ False
+  one_logger_project .............................. megatron-lm
+  one_logger_run_name ............................. None
+  onnx_safe ....................................... None
+  openai_gelu ..................................... False
+  optimizer ....................................... adam
+  output_bert_embeddings .......................... False
+  overlap_grad_reduce ............................. True
+  overlap_p2p_comm ................................ False
+  overlap_p2p_comm_warmup_flush ................... False
+  overlap_param_gather ............................ True
+  overlap_param_gather_with_optimizer_step ........ False
+  override_opt_param_scheduler .................... False
+  params_dtype .................................... torch.bfloat16
+  patch_dim ....................................... 16
+  per_split_data_args_path ........................ None
+  perform_initialization .......................... True
+  pipeline_model_parallel_size .................... 1
+  pipeline_model_parallel_split_rank .............. None
+  position_embedding_type ......................... rope
+  pretrained_checkpoint ........................... None
+  profile ......................................... False
+  profile_ranks ................................... [0]
+  profile_step_end ................................ 12
+  profile_step_start .............................. 10
+  q_lora_rank ..................................... None
+  qk_head_dim ..................................... 128
+  qk_layernorm .................................... False
+  qk_pos_emb_head_dim ............................. 64
+  query_in_block_prob ............................. 0.1
+  rampup_batch_size ............................... None
+  rank ............................................ 0
+  recompute_granularity ........................... None
+  recompute_method ................................ None
+  recompute_num_layers ............................ None
+  record_memory_history ........................... False
+  renormalize_blend_weights ....................... False
+  rerun_mode ...................................... disabled
+  reset_attention_mask ............................ False
+  reset_position_ids .............................. False
+  retriever_report_topk_accuracies ................ []
+  retriever_score_scaling ......................... False
+  retriever_seq_length ............................ 256
+  retro_add_retriever ............................. False
+  retro_attention_gate ............................ 1
+  retro_cyclic_train_iters ........................ None
+  retro_encoder_attention_dropout ................. 0.1
+  retro_encoder_hidden_dropout .................... 0.1
+  retro_encoder_layers ............................ 2
+  retro_num_neighbors ............................. 2
+  retro_num_retrieved_chunks ...................... 2
+  retro_project_dir ............................... None
+  retro_verify_neighbor_count ..................... True
+  rotary_base ..................................... 10000
+  rotary_interleaved .............................. False
+  rotary_percent .................................. 1.0
+  rotary_scaling_factor ........................... 1.0
+  rotary_seq_len_interpolation_factor ............. None
+  s3_cache_path ................................... None
+  sample_rate ..................................... 1.0
+  save ............................................ None
+  save_interval ................................... 200000
+  scatter_gather_tensors_in_pipeline .............. True
+  seed ............................................ 1234
+  seq_length ...................................... 4096
+  sequence_parallel ............................... True
+  sgd_momentum .................................... 0.9
+  short_seq_prob .................................. 0.1
+  skip_train ...................................... False
+  skipped_train_samples ........................... 0
+  spec ............................................ None
+  split ........................................... 99990,8,2
+  squared_relu .................................... False
+  standalone_embedding_stage ...................... False
+  start_weight_decay .............................. 0.1
+  straggler_ctrlr_port ............................ 65535
+  straggler_minmax_count .......................... 1
+  swiglu .......................................... True
+  swin_backbone_type .............................. tiny
+  tensor_model_parallel_size ...................... 8
+  tensorboard_dir ................................. experiment/1nodes_rank0_train_70B_mbs5_bs120_tp8_pp1_cp1_iter12/TE_FP8_0/2025-12-14_22-35-23
+  tensorboard_log_interval ........................ 1
+  tensorboard_queue_size .......................... 1000
+  test_data_path .................................. None
+  test_mode ....................................... False
+  tiktoken_num_special_tokens ..................... 1000
+  tiktoken_pattern ................................ None
+  tiktoken_special_tokens ......................... None
+  timing_log_level ................................ 0
+  timing_log_option ............................... minmax
+  titles_data_path ................................ None
+  tokenizer_model ................................. NousResearch/Llama-2-7b-chat-hf
+  tokenizer_type .................................. HuggingFaceTokenizer
+  tp_comm_bootstrap_backend ....................... nccl
+  tp_comm_bulk_dgrad .............................. True
+  tp_comm_bulk_wgrad .............................. True
+  tp_comm_overlap ................................. False
+  tp_comm_overlap_ag .............................. True
+  tp_comm_overlap_cfg ............................. None
+  tp_comm_overlap_rs .............................. True
+  tp_comm_overlap_rs_dgrad ........................ False
+  tp_comm_split_ag ................................ True
+  tp_comm_split_rs ................................ True
+  train_data_path ................................. None
+  train_iters ..................................... 12
+  train_samples ................................... None
+  train_sync_interval ............................. None
+  transformer_impl ................................ transformer_engine
+  transformer_pipeline_model_parallel_size ........ 1
+  untie_embeddings_and_output_weights ............. True
+  use_checkpoint_args ............................. False
+  use_checkpoint_opt_param_scheduler .............. False
+  use_cpu_initialization .......................... None
+  use_dist_ckpt ................................... True
+  use_dist_ckpt_deprecated ........................ False
+  use_distributed_optimizer ....................... True
+  use_flash_attn .................................. True
+  use_legacy_models ............................... False
+  use_mp_args_from_checkpoint_args ................ False
+  use_one_sent_docs ............................... False
+  use_pytorch_profiler ............................ False
+  use_ring_exchange_p2p ........................... False
+  use_rope_scaling ................................ False
+  use_rotary_position_embeddings .................. False
+  use_tokenizer_model_from_checkpoint_args ........ True
+  use_torch_fsdp2 ................................. False
+  use_tp_pp_dp_mapping ............................ False
+  v_head_dim ...................................... 128
+  valid_data_path ................................. None
+  variable_seq_lengths ............................ False
+  virtual_pipeline_model_parallel_size ............ None
+  vision_backbone_type ............................ vit
+  vision_pretraining .............................. False
+  vision_pretraining_type ......................... classify
+  vocab_extra_ids ................................. 0
+  vocab_file ...................................... None
+  vocab_size ...................................... None
+  wandb_exp_name .................................. 
+  wandb_project ................................... 
+  wandb_save_dir .................................. 
+  weight_decay .................................... 0.1
+  weight_decay_incr_style ......................... constant
+  wgrad_deferral_limit ............................ 0
+  window_size ..................................... None
+  world_size ...................................... 8
+  yaml_cfg ........................................ None
+-------------------- end of arguments ---------------------
+> building HuggingFaceTokenizer tokenizer ...
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+ > padded vocab (size: 32001) with 767 dummy tokens (new size: 32768)
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+> initializing torch distributed ...
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+> initialized tensor model parallel with size 8
+> initialized pipeline model parallel with size 1
+> setting random seeds to 1234 ...
+> compiling dataset index builder ...
+make: Entering directory '/workspace/Megatron-LM/megatron/core/datasets'
+make: Nothing to be done for 'default'.
+make: Leaving directory '/workspace/Megatron-LM/megatron/core/datasets'
+>>> done with dataset index builder. Compilation time: 0.031 seconds
+WARNING: constraints for invoking optimized fused softmax kernel are not met. We default back to unfused kernel invocations.
+> compiling and loading fused kernels ...
+/opt/venv/lib/python3.10/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+[rank0]:[W1214 22:35:45.807217253 ProcessGroupNCCL.cpp:5138] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+> setting tensorboard ...
+WARNING: one_logger package is required to enable e2e metrics tracking. please go to https://confluence.nvidia.com/display/MLWFO/Package+Repositories for details to install it
+WARNING:megatron.core.rerun_state_machine:RerunStateMachine initialized in mode disabled
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+>>> done with compiling and loading fused kernels. Compilation time: 10.352 seconds
+time to initialize megatron (seconds): 13.542
+/opt/venv/lib/python3.10/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+[after megatron is initialized] datetime: 2025-12-14 22:35:58 
+building GPT model ...
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/workspace/Megatron-LM/megatron/core/models/gpt/gpt_layer_specs.py:78: UserWarning: The fp8 argument in "get_gpt_layer_with_transformer_engine_spec" has been deprecated and will be removed soon. Please update your code accordingly.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+/opt/venv/lib/python3.10/site-packages/transformer_engine/pytorch/cpu_offload.py:595: DeprecationWarning: Offloading weights is deprecated. Using offload_weights=True does not have any effect.
+  warnings.warn(
+ > number of parameters on (tensor, pipeline) model parallel rank (7, 0): 8624807936
+ > number of parameters on (tensor, pipeline) model parallel rank (2, 0): 8624807936
+ > number of parameters on (tensor, pipeline) model parallel rank (5, 0): 8624807936
+ > number of parameters on (tensor, pipeline) model parallel rank (1, 0): 8624807936
+ > number of parameters on (tensor, pipeline) model parallel rank (6, 0): 8624807936
+ > number of parameters on (tensor, pipeline) model parallel rank (0, 0): 8624807936
+ > number of parameters on (tensor, pipeline) model parallel rank (3, 0): 8624807936
+ > number of parameters on (tensor, pipeline) model parallel rank (4, 0): 8624807936
+[after model, optimizer, and learning rate scheduler are built] datetime: 2025-12-14 22:35:59 
+> building train, validation, and test datasets ...
+ > datasets target sizes (minimum size):
+    train:      1440
+    validation: -120
+    test:       -120
+> building train, validation, and test datasets for GPT ...
+WARNING:megatron.core.datasets.gpt_dataset:Unable to save MockGPTDataset indexes because path_to_cache is None
+WARNING:megatron.core.datasets.gpt_dataset:Unable to save MockGPTDataset indexes because path_to_cache is None
+WARNING:megatron.core.datasets.gpt_dataset:Unable to save MockGPTDataset indexes because path_to_cache is None
+> finished creating GPT datasets ...
+[after dataloaders are built] datetime: 2025-12-14 22:35:59 
+done with setup ...
+training ...
+(min, max) time across ranks (ms):
+    model-and-optimizer-setup ......................: (842.89, 883.55)
+    train/valid/test-data-iterators-setup ..........: (5.92, 5.97)
+[before the start of training step] datetime: 2025-12-14 22:36:00 
+[aiter] start build [module_rope_general_fwd] under /workspace/aiter/aiter/jit/build/module_rope_general_fwd
+INFO:aiter:start build [module_rope_general_fwd] under /workspace/aiter/aiter/jit/build/module_rope_general_fwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_fwd
+[aiter] [32mfinish build [module_rope_general_fwd], cost 91.2s [0m
+INFO:aiter:[32mfinish build [module_rope_general_fwd], cost 91.2s [0m
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+INFO:aiter:import [module_rope_general_fwd] under /workspace/aiter/aiter/jit/module_rope_general_fwd.so
+[aiter] type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_fwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] start build [module_rope_general_bwd] under /workspace/aiter/aiter/jit/build/module_rope_general_bwd
+INFO:aiter:start build [module_rope_general_bwd] under /workspace/aiter/aiter/jit/build/module_rope_general_bwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+[aiter] waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+INFO:aiter:waiting for baton release at /workspace/aiter/aiter/jit/build/lock_module_rope_general_bwd
+[aiter] [32mfinish build [module_rope_general_bwd], cost 94.1s [0m
+INFO:aiter:[32mfinish build [module_rope_general_bwd], cost 94.1s [0m
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+[aiter] import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+INFO:aiter:import [module_rope_general_bwd] under /workspace/aiter/aiter/jit/module_rope_general_bwd.so
+[aiter] type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+WARNING:aiter:type hints mismatch, override to --> rope_bwd_impl(arg0: torch.Tensor, arg1: torch.Tensor, arg2: torch.Tensor, arg3: int, arg4: bool, arg5: bool) -> None
+/opt/venv/lib/python3.10/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+Number of parameters in transformer layers in billions:  68.45
+Number of parameters in embedding layers in billions: 0.54
+Total number of parameters in billions: 68.99
+Number of parameters in most loaded shard in billions: 8.6238
+Theoretical memory footprints: weight and optimizer=148037.66 MB
+ [2025-12-14 22:40:33] iteration        1/      12 | consumed samples:          120 | elapsed time per iteration (ms): 273346.4 | mem usages: 0.6298 | throughput per GPU (TFLOP/s/GPU): 99.9 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 1.203316E+01 | loss scale: 1.0 | grad norm: 41.028 | number of skipped iterations:   0 | number of nan iterations:   0 |
+[Rank 1] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+[Rank 5] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+[Rank 4] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+[Rank 3] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+[Rank 6] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+[Rank 7] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+[Rank 0] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+[Rank 2] (after 1 iterations) memory (MB) | allocated: 148561.61328125 | max allocated: 148561.62548828125 | reserved: 159262.0 | max reserved: 159262.0
+ [2025-12-14 22:41:40] iteration        2/      12 | consumed samples:          240 | elapsed time per iteration (ms): 66869.4 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 408.4 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 1.146164E+01 | loss scale: 1.0 | grad norm: 39.960 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:42:45] iteration        3/      12 | consumed samples:          360 | elapsed time per iteration (ms): 65280.3 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 418.4 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 1.006598E+01 | loss scale: 1.0 | grad norm: 7.104 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:43:51] iteration        4/      12 | consumed samples:          480 | elapsed time per iteration (ms): 65439.9 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 417.4 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 1.025788E+01 | loss scale: 1.0 | grad norm: 3.502 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:44:56] iteration        5/      12 | consumed samples:          600 | elapsed time per iteration (ms): 65351.6 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 417.9 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 1.528932E+01 | loss scale: 1.0 | grad norm: 4.292 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:46:01] iteration        6/      12 | consumed samples:          720 | elapsed time per iteration (ms): 65028.7 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 420.0 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 9.493834E+00 | loss scale: 1.0 | grad norm: 6.352 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:47:05] iteration        7/      12 | consumed samples:          840 | elapsed time per iteration (ms): 64391.2 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 424.2 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 1.117541E+01 | loss scale: 1.0 | grad norm: 4.260 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:48:10] iteration        8/      12 | consumed samples:          960 | elapsed time per iteration (ms): 64574.5 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 423.0 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 8.912235E+00 | loss scale: 1.0 | grad norm: 1.772 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:49:14] iteration        9/      12 | consumed samples:         1080 | elapsed time per iteration (ms): 64559.2 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 423.1 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 8.652454E+00 | loss scale: 1.0 | grad norm: 0.991 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:50:19] iteration       10/      12 | consumed samples:         1200 | elapsed time per iteration (ms): 64340.6 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 424.5 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 8.526107E+00 | loss scale: 1.0 | grad norm: 1.166 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:51:23] iteration       11/      12 | consumed samples:         1320 | elapsed time per iteration (ms): 64134.6 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 425.9 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 8.418421E+00 | loss scale: 1.0 | grad norm: 0.821 | number of skipped iterations:   0 | number of nan iterations:   0 |
+ [2025-12-14 22:52:27] iteration       12/      12 | consumed samples:         1440 | elapsed time per iteration (ms): 64324.1 | mem usages: 0.8521 | throughput per GPU (TFLOP/s/GPU): 424.6 | learning rate: 1.000000E-04 | global batch size:   120 | lm loss: 8.372754E+00 | loss scale: 1.0 | grad norm: 0.652 | number of skipped iterations:   0 | number of nan iterations:   0 |
+[after training is done] datetime: 2025-12-14 22:52:27 
+[rank3]:[W1214 22:52:29.589722851 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank6]:[W1214 22:52:29.727801266 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank4]:[W1214 22:52:29.787542684 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W1214 22:52:29.848636895 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank1]:[W1214 22:52:29.997907397 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank5]:[W1214 22:52:29.072712101 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank2]:[W1214 22:52:29.131843569 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank7]:[W1214 22:52:30.341043418 ProcessGroupNCCL.cpp:1553] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+throughput per GPU: 421.6
+elapsed time per iteration: 64788.955555555556
+tokens/GPU/s: 948.309777
+mem usages: 0.8521
