@@ -8,7 +8,7 @@ The goal is to complete testing and collect all data from up to 100 nodes within
 
 The system contains following components:
 
-<img src="sado_v1.png" alt="sado" width="700" height="400"/>
+<img src="sado_v1.png" alt="sado" width="800" height="500"/>
 
 - **GPU Nodes** - These nodes will run ROCm 7 and be managed by DOKS 1.34. During testing, each node will execute a test workload as a single pod that utilizes all 8 GPUs to run training and inference jobs sequentially. The workload will upload job logs (unstructured data) and benchmark metrics (structured data) to cloud storage (DO Spaces), using the DOKS worker name as the file name. To reduce concurrent access to Hugging Face and minimize system startup time, we pre-download the required models to the cloud storage and load them onto the DOKS worker nodes before use.
 
