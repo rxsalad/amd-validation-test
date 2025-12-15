@@ -22,7 +22,7 @@ RUN pip install python-dotenv
     
 WORKDIR /app
 
-COPY test_inference.py helper.py /app/
+COPY test_inference.py test_model_loading.py helper.py /app/
 
 CMD ["python3", "test_inference.py"]
 # Image: docker.io/richardxgf/amd:vllm_0.11.1

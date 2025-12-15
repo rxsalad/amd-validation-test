@@ -89,11 +89,13 @@ spec:
             type: Unconfined
 
       - name: model-loader-container # Restart if it returns non-zero
-        image: docker.io/richardxgf/amd:model_loading_1.0
+        #image: docker.io/richardxgf/amd:model_loading_1.0
+        image: docker.io/richardxgf/amd:vllm_0.11.1 # Using the same image as vllm inference for model loading 
         imagePullPolicy: Always
         #command: ["sh", "-c", "sleep infinity"] # Test only
         #command: ["sh", "-c", "python3 test_model_loading.py && sleep infinity"] # Run as the main container
         #command: ["sh", "-c", "python3 test_model_loading.py"] # The default command in the container (for initContainer), it would exits with 0 or 1 (loading failed)
+        command: ["sh", "-c", "python3 test_model_loading.py"] # it would exits with 0 or 1 (loading failed)
 
         env:
         - name: TASK_NAME # Task Name, can be anything 
