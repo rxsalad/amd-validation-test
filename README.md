@@ -150,7 +150,7 @@ doctl kubernetes cluster create rs-amd-20251111-nyc2 \
   --region nyc2 \
   --version 1.34.1-do.1 \
   --node-pool "name=rs-amd-20251111-cpu-pool;size=s-4vcpu-8gb-amd;count=2" \
-  --node-pool "name=rs-amd-20251111-gpu-325-pool;size=gpu-mi350x8-2304gb-contracted;count=50" \
+  --node-pool "name=rs-amd-20251111-gpu-325-pool;size=gpu-mi325x8-2048gb-contracted;count=50" \
   --node-pool "name=rs-amd-20251111-gpu-350-pool;size=gpu-mi350x8-2304gb-contracted;count=50" \
   --tag "rs-amd-20251111"
 ```
